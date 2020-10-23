@@ -6,17 +6,18 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 11:59:14 by clynderl          #+#    #+#             */
-/*   Updated: 2020/10/23 12:46:14 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/10/23 18:23:34 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRATOL_H
+
 # include <unistd.h>
 # include <stdlib.h>
 # include <mlx.h>
 # include <math.h>
-# include "libft.h"
+
 # define WIDTH 800
 # define HEIGHT 600
 # define MBTN_L 1
