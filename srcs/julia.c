@@ -6,77 +6,77 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 07:53:16 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 07:56:27 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:20:21 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int		mouse_julia(int x, int y, t_fractol *data)
+int		mouse_julia(int x, int y, t_fractol *env)
 {
-	if (data->fract == 1 && data->julia_mouse == 1)
+	if (env->fract == 1 && env->julia_mouse == 1)
 	{
-		data->c_r = x * 2;
-		data->c_i = y * 2 - 800;
-		fract_calc(data);
+		env->c_r = x * 2;
+		env->c_i = y * 2 - 800;
+		fract_calc(env);
 	}
 	return (0);
 }
 
-void	julia_init(t_fractol *data)
+void	julia_init(t_fractol *env)
 {
-	data->it_max = 50;
-	data->zoom = 200;
-	data->x1 = -2.0;
-	data->y1 = -1.9;
-	data->color = 265;
-	data->c_r = 0.285;
-	data->c_i = 0.01;
-	data->julia_mouse = 1;
+	env->it_max = 50;
+	env->zoom = 200;
+	env->x1 = -2.0;
+	env->y1 = -1.9;
+	env->color = 265;
+	env->c_r = 0.285;
+	env->c_i = 0.01;
+	env->julia_mouse = 1;
 }
 
-void	julia_calc(t_fractol *data)
+void	julia_calc(t_fractol *env)
 {
-	data->z_r = data->x / data->zoom + data->x1;
-	data->z_i = data->y / data->zoom + data->y1;
-	data->it = 0;
-	while (data->z_r * data->z_r + data->z_i
-			* data->z_i < 4 && data->it < data->it_max)
+	env->z_r = env->x / env->zoom + env->x1;
+	env->z_i = env->y / env->zoom + env->y1;
+	env->it = 0;
+	while (env->z_r * env->z_r + env->z_i
+			* env->z_i < 4 && env->it < env->it_max)
 	{
-		data->tmp = data->z_r;
-		data->z_r = data->z_r * data->z_r -
-			data->z_i * data->z_i - 0.8 + (data->c_r / WIDTH);
-		data->z_i = 2 * data->z_i * data->tmp + data->c_i / WIDTH;
-		data->it++;
+		env->tmp = env->z_r;
+		env->z_r = env->z_r * env->z_r -
+			env->z_i * env->z_i - 0.8 + (env->c_r / WIDTH);
+		env->z_i = 2 * env->z_i * env->tmp + env->c_i / WIDTH;
+		env->it++;
 	}
-	if (data->it == data->it_max)
-		put_pxl_to_img(data, data->x, data->y, 0x000000);
+	if (env->it == env->it_max)
+		put_pxl_to_img(env, env->x, env->y, 0x000000);
 	else
-		put_pxl_to_img(data, data->x, data->y, (data->color * data->it));
+		put_pxl_to_img(env, env->x, env->y, (env->color * env->it));
 }
 
 void	*julia(void *tab)
 {
 	int		tmp;
-	t_fractol	*data;
+	t_fractol	*env;
 
-	data = (t_fractol *)tab;
-	data->x = 0;
-	tmp = data->y;
-	while (data->x < WIDTH)
+	env = (t_fractol *)tab;
+	env->x = 0;
+	tmp = env->y;
+	while (env->x < WIDTH)
 	{
-		data->y = tmp;
-		while (data->y < data->y_max)
+		env->y = tmp;
+		while (env->y < env->y_max)
 		{
-			julia_calc(data);
-			data->y++;
+			julia_calc(env);
+			env->y++;
 		}
-		data->x++;
+		env->x++;
 	}
 	return (tab);
 }
 
-void	julia_pthread(t_fractol *data)
+void	julia_pthread(t_fractol *env)
 {
 	t_fractol	tab[THREAD_NUMBER];
 	pthread_t	t[THREAD_NUMBER];
@@ -85,7 +85,7 @@ void	julia_pthread(t_fractol *data)
 	i = 0;
 	while (i < THREAD_NUMBER)
 	{
-		ft_memcpy((void*)&tab[i], (void*)data, sizeof(t_fractol));
+		ft_memcpy((void*)&tab[i], (void*)env, sizeof(t_fractol));
 		tab[i].y = THREAD_WIDTH * i;
 		tab[i].y_max = THREAD_WIDTH * (i + 1);
 		pthread_create(&t[i], NULL, julia, &tab[i]);
@@ -93,5 +93,5 @@ void	julia_pthread(t_fractol *data)
 	}
 	while (i--)
 		pthread_join(t[i], NULL);
-	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 }

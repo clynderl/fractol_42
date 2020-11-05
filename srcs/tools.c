@@ -6,7 +6,7 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 07:54:36 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 07:56:30 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:20:38 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,24 @@ int		ft_close(void)
 	return (0);
 }
 
-void	put_pxl_to_img(t_fractol *data, int x, int y, int color)
+void	put_pxl_to_img(t_fractol *env, int x, int y, int color)
 {
-	if (data->x < WIDTH && data->y < WIDTH)
+	if (env->x < WIDTH && env->y < WIDTH)
 	{
-		color = mlx_get_color_value(data->mlx, color);
-		ft_memcpy(data->img_ptr + 4 * WIDTH * y + x * 4,
+		color = mlx_get_color_value(env->mlx, color);
+		ft_memcpy(env->img_ptr + 4 * WIDTH * y + x * 4,
 				&color, sizeof(int));
 	}
 }
 
-void	put_text(t_fractol *data)
+void	put_text(t_fractol *env)
 {
 	char	*text;
 	char	*nb;
 
-	nb = ft_itoa(data->it_max);
+	nb = ft_itoa(env->it_max);
 	text = ft_strjoin("iterations : ", nb);
-	mlx_string_put(data->mlx, data->win, 10, 10, 0xFFFFFF, text);
+	mlx_string_put(env->mlx, env->win, 10, 10, 0xFFFFFF, text);
 	ft_strdel(&text);
 	ft_strdel(&nb);
 }

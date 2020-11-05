@@ -6,7 +6,7 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 12:04:04 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 13:15:30 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:18:48 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ void	mlx_win_init(t_fractol *env)
 			&env->bpp, &env->sl, &env->endian);
 }
 
-void	fract_calc(t_fractol *data)
+void	fract_calc(t_fractol *env)
 {
-	if (data->it_max < 0)
-		data->it_max = 0;
-	if (data->fract == 0)
-		mandelbrot_pthread(data);
-	else if (data->fract == 1)
-		julia_pthread(data);
-	else if (data->fract == 2)
-		burningship_pthread(data);
-	if (data->show_text)
-		put_text(data);
+	if (env->it_max < 0)
+		env->it_max = 0;
+	if (env->fract == 0)
+		mandelbrot_pthread(env);
+	else if (env->fract == 1)
+		julia_pthread(env);
+	else if (env->fract == 2)
+		burningship_pthread(env);
+	if (env->show_text)
+		put_text(env);
 }
 
 int		fract_init(char **argv, t_fractol *env)

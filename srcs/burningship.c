@@ -6,59 +6,59 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 07:54:01 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 07:56:22 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:19:26 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void	burningship_init(t_fractol *data)
+void	burningship_init(t_fractol *env)
 {
-	data->it_max = 50;
-	data->zoom = 220;
-	data->x1 = -2.2;
-	data->y1 = -2.5;
-	data->color = 265;
+	env->it_max = 50;
+	env->zoom = 220;
+	env->x1 = -2.2;
+	env->y1 = -2.5;
+	env->color = 265;
 }
 
-void	burningship_calc(t_fractol *data)
+void	burningship_calc(t_fractol *env)
 {
-	data->c_r = data->x / data->zoom + data->x1;
-	data->c_i = data->y / data->zoom + data->y1;
-	data->z_r = 0;
-	data->z_i = 0;
-	data->it = 0;
-	while (data->z_r * data->z_r + data->z_i * data->z_i < 4
-			&& data->it < data->it_max)
+	env->c_r = env->x / env->zoom + env->x1;
+	env->c_i = env->y / env->zoom + env->y1;
+	env->z_r = 0;
+	env->z_i = 0;
+	env->it = 0;
+	while (env->z_r * env->z_r + env->z_i * env->z_i < 4
+			&& env->it < env->it_max)
 	{
-		data->tmp = data->z_r * data->z_r - data->z_i * data->z_i + data->c_r;
-		data->z_i = fabs(2 * data->z_r * data->z_i) + data->c_i;
-		data->z_r = data->tmp;
-		data->it++;
+		env->tmp = env->z_r * env->z_r - env->z_i * env->z_i + env->c_r;
+		env->z_i = fabs(2 * env->z_r * env->z_i) + env->c_i;
+		env->z_r = env->tmp;
+		env->it++;
 	}
-	if (data->it == data->it_max)
-		put_pxl_to_img(data, data->x, data->y, 0x000000);
+	if (env->it == env->it_max)
+		put_pxl_to_img(env, env->x, env->y, 0x000000);
 	else
-		put_pxl_to_img(data, data->x, data->y, (data->color * data->it));
+		put_pxl_to_img(env, env->x, env->y, (env->color * env->it));
 }
 
 void	*burningship(void *tab)
 {
 	int		tmp;
-	t_fractol	*data;
+	t_fractol	*env;
 
-	data = (t_fractol *)tab;
-	data->x = 0;
-	tmp = data->y;
-	while (data->x < WIDTH)
+	env = (t_fractol *)tab;
+	env->x = 0;
+	tmp = env->y;
+	while (env->x < WIDTH)
 	{
-		data->y = tmp;
-		while (data->y < data->y_max)
+		env->y = tmp;
+		while (env->y < env->y_max)
 		{
-			burningship_calc(data);
-			data->y++;
+			burningship_calc(env);
+			env->y++;
 		}
-		data->x++;
+		env->x++;
 	}
 	return (tab);
 }

@@ -6,72 +6,72 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 07:55:02 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 13:07:09 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:20:01 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int		key_hook2(int keycode, t_fractol *data)
+int		key_hook2(int keycode, t_fractol *env)
 {
 	if (keycode == 19)
-		data->color = 2050;
+		env->color = 2050;
 	else if (keycode == 20)
-		data->color = 265;
+		env->color = 265;
 	else if (keycode == 35)
-		data->julia_mouse = !data->julia_mouse;
+		env->julia_mouse = !env->julia_mouse;
 	else if (keycode == 34)
-		data->show_text = !data->show_text;
+		env->show_text = !env->show_text;
 	return (0);
 }
 
-int		key_hook(int keycode, t_fractol *data)
+int		key_hook(int keycode, t_fractol *env)
 {
 	if (keycode == 53)
 		exit(1);
 	else if (keycode == 69)
-		data->it_max += 50;
+		env->it_max += 50;
 	else if (keycode == 78)
-		data->it_max -= 50;
+		env->it_max -= 50;
 	else if (keycode == 123)
-		data->x1 -= 30 / data->zoom;
+		env->x1 -= 30 / env->zoom;
 	else if (keycode == 124)
-		data->x1 += 30 / data->zoom;
+		env->x1 += 30 / env->zoom;
 	else if (keycode == 125)
-		data->y1 += 30 / data->zoom;
+		env->y1 += 30 / env->zoom;
 	else if (keycode == 126)
-		data->y1 -= 30 / data->zoom;
+		env->y1 -= 30 / env->zoom;
 	// else if (keycode == 49)
-	// 	fract_init(data);
+	// 	fract_init(env);
 	else if (keycode == 18)
-		data->color = 1677216;
-	key_hook2(keycode, data);
-	fract_calc(data);
+		env->color = 1677216;
+	key_hook2(keycode, env);
+	fract_calc(env);
 	return (0);
 }
 
-void	ft_zoom(int x, int y, t_fractol *data)
+void	ft_zoom(int x, int y, t_fractol *env)
 {
-	data->x1 = (x / data->zoom + data->x1) - (x / (data->zoom * 1.3));
-	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom * 1.3));
-	data->zoom *= 1.3;
-	data->it_max++;
+	env->x1 = (x / env->zoom + env->x1) - (x / (env->zoom * 1.3));
+	env->y1 = (y / env->zoom + env->y1) - (y / (env->zoom * 1.3));
+	env->zoom *= 1.3;
+	env->it_max++;
 }
 
-void	ft_dezoom(int x, int y, t_fractol *data)
+void	ft_dezoom(int x, int y, t_fractol *env)
 {
-	data->x1 = (x / data->zoom + data->x1)  - (x / (data->zoom / 1.3));
-	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom / 1.3));
-	data->zoom /= 1.3;
-	data->it_max--;
+	env->x1 = (x / env->zoom + env->x1)  - (x / (env->zoom / 1.3));
+	env->y1 = (y / env->zoom + env->y1) - (y / (env->zoom / 1.3));
+	env->zoom /= 1.3;
+	env->it_max--;
 }
 
-int		mouse_hook(int mousecode, int x, int y, t_fractol *data)
+int		mouse_hook(int mousecode, int x, int y, t_fractol *env)
 {
 	if (mousecode == 4 || mousecode == 1)
-		ft_zoom(x, y, data);
+		ft_zoom(x, y, env);
 	else if (mousecode == 5 || mousecode == 2)
-		ft_dezoom(x, y, data);
-	fract_calc(data);
+		ft_dezoom(x, y, env);
+	fract_calc(env);
 	return (0);
 }
