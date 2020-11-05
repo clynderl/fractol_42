@@ -6,11 +6,12 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 12:04:04 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 07:56:23 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:15:30 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+#include "ft_printf.h"
 
 void	mlx_win_init(t_fractol *env)
 {
@@ -37,17 +38,17 @@ void	fract_calc(t_fractol *data)
 
 int		fract_init(char **argv, t_fractol *env)
 {
-	if (ft_strcmp(argv[1], "mandelbrot"))
+	if (ft_strcmp(argv[1], "mandelbrot") == 0)
 	{
 		env->fract = 0;
 		mandelbrot_init(env);
 	}
-	else if (ft_strcmp(argv[1], "julia"))
+	else if (ft_strcmp(argv[1], "julia") == 0)
 	{
 		env->fract = 1;
 		julia_init(env);
 	}
-	else if (ft_strcmp(argv[1], "burningship"))
+	else if (ft_strcmp(argv[1], "burningship") == 0)
 	{
 		env->fract = 2;
 		burningship_init(env);
@@ -67,6 +68,10 @@ int		main(int argc, char *argv[])
 	{
 		mlx_win_init(env);
 		fract_calc(env);
+		mlx_hook(env->win, 6, 1L < 6, mouse_julia, env);
+		mlx_hook(env->win, 17, 0L, ft_close, env);
+		mlx_key_hook(env->win, key_hook, env);
+		mlx_mouse_hook(env->win, mouse_hook, env);
 		mlx_loop(env->mlx);
 	}
 	else

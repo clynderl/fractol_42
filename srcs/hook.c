@@ -6,7 +6,7 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 07:55:02 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 07:56:25 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 13:07:09 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int		key_hook(int keycode, t_fractol *data)
 		data->y1 += 30 / data->zoom;
 	else if (keycode == 126)
 		data->y1 -= 30 / data->zoom;
-	else if (keycode == 49)
-		fract_init(data);
+	// else if (keycode == 49)
+	// 	fract_init(data);
 	else if (keycode == 18)
 		data->color = 1677216;
 	key_hook2(keycode, data);
