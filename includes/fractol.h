@@ -6,7 +6,7 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 11:59:14 by clynderl          #+#    #+#             */
-/*   Updated: 2020/10/23 18:23:34 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/05 02:43:40 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,38 @@
 # include <stdlib.h>
 # include <mlx.h>
 # include <math.h>
-
-# define WIDTH 800
+# include <pthread.h>
 # define HEIGHT 600
-# define MBTN_L 1
-# define MBTN_R 2
-# define MOUSE_UP 5
-# define MOUSE_DOWN 4
-# define MOUSE_LEFT 7
-# define MOUSE_RIGHT 6
+# define WIDTH 600
+# define THREAD_WIDTH 5
+# define THREAD_NUMBER 120
 
-typedef struct	s_env
+typedef struct	s_fractol
 {
-	int			(*fun)(struct s_env *e, int x, int y);
-	void		*mlx_ptr;
-	void		*win_ptr;
+	void		*mlx;
+	void		*win;
+	void		*img;
 	void		*img_ptr;
-	char		*img;
+	int			endian;
+	int			sl;
 	int			bpp;
-	int			en;
-	int			ln;
-}				t_env;
-
-
-int		init_mlx(t_env *e);
+	int			fract;
+	int			color;
+	int			julia_mouse;
+	int			x;
+	int			y;
+	int			y_max;
+	int			it;
+	int			it_max;
+	int			show_text;
+	double		zoom;
+	double		x1;
+	double		y1;
+	double		c_r;
+	double		c_i;
+	double		z_r;
+	double		z_i;
+	double		tmp;
+}				t_fractol;
 
 #endif
