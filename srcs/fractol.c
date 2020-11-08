@@ -5,76 +5,50 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/23 12:04:04 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 13:18:48 by clynderl         ###   ########.fr       */
+/*   Created: 2020/11/01 07:52:00 by clynderl          #+#    #+#             */
+/*   Updated: 2020/11/08 10:07:54 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include "ft_printf.h"
 
-void	mlx_win_init(t_fractol *env)
-{
-	env->mlx = mlx_init();
-	env->win = mlx_new_window(env->mlx, HEIGHT, WIDTH, "Fractol");
-	env->img = mlx_new_image(env->mlx, HEIGHT, WIDTH);
-	env->img_ptr = mlx_get_data_addr(env->img,
-			&env->bpp, &env->sl, &env->endian);
-}
-
-void	fract_calc(t_fractol *env)
-{
-	if (env->it_max < 0)
-		env->it_max = 0;
-	if (env->fract == 0)
-		mandelbrot_pthread(env);
-	else if (env->fract == 1)
-		julia_pthread(env);
-	else if (env->fract == 2)
-		burningship_pthread(env);
-	if (env->show_text)
-		put_text(env);
-}
-
-int		fract_init(char **argv, t_fractol *env)
-{
-	if (ft_strcmp(argv[1], "mandelbrot") == 0)
-	{
-		env->fract = 0;
-		mandelbrot_init(env);
-	}
-	else if (ft_strcmp(argv[1], "julia") == 0)
-	{
-		env->fract = 1;
-		julia_init(env);
-	}
-	else if (ft_strcmp(argv[1], "burningship") == 0)
-	{
-		env->fract = 2;
-		burningship_init(env);
-	}
-	else
-		return (0);
-	return (1);
-}
-
-int		main(int argc, char *argv[])
+void	*draw_fractal(void *tab)
 {
 	t_fractol	*env;
+	int		tmp;
 
-	if (!(env = (t_fractol*)malloc(sizeof(t_fractol))))
-		return (-1);
-	if (argc == 2 && fract_init(argv, env))
+	env = (t_fractol *)tab;
+	env->x = 0;
+	tmp = env->y;
+	while (env->x < WIDTH)
 	{
-		mlx_win_init(env);
-		fract_calc(env);
-		mlx_hook(env->win, 6, 1L < 6, mouse_julia, env);
-		mlx_hook(env->win, 17, 0L, ft_close, env);
-		mlx_key_hook(env->win, key_hook, env);
-		mlx_mouse_hook(env->win, mouse_hook, env);
-		mlx_loop(env->mlx);
+		env->y = tmp;
+		while (env->y < env->y_max)
+		{
+			env->function(env);
+			env->y++;
+		}
+		env->x++;
 	}
-	else
-		ft_printf("usage: fractol [ mandelbrot | julia | burningship ]\n");
-	return (0);
+	return (tab);
+}
+
+void	fract_pthread(t_fractol *env)
+{
+	t_fractol	tab[THREAD_NUMBER];
+	pthread_t	t[THREAD_NUMBER];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_NUMBER)
+	{
+		ft_memcpy((void*)&tab[i], (void*)env, sizeof(t_fractol));
+		tab[i].y = THREAD_WIDTH * i;
+		tab[i].y_max = THREAD_WIDTH * (i + 1);
+		pthread_create(&t[i], NULL, draw_fractal, &tab[i]);
+		i++;
+	}
+	while (i--)
+		pthread_join(t[i], NULL);
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 11:59:14 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 13:11:13 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/08 09:57:34 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 typedef struct	s_fractol
 {
+	void		(*function)(struct s_fractol *e);
 	void		*mlx;
 	void		*win;
 	void		*img;
@@ -41,7 +42,6 @@ typedef struct	s_fractol
 	int			y_max;
 	int			it;
 	int			it_max;
-	int			show_text;
 	double		zoom;
 	double		x1;
 	double		y1;
@@ -52,15 +52,14 @@ typedef struct	s_fractol
 	double		tmp;
 }				t_fractol;
 
-void	mandelbrot_init(t_fractol *data);
-void	mandelbrot_pthread(t_fractol *data);
+int		mlx_win_init(t_fractol *env);
+void	mandelbrot_calc(t_fractol *env);
+void	julia_calc(t_fractol *env);
+void	burningship_calc(t_fractol *env);
+void	fract_pthread(t_fractol *env);
 int		ft_close(void);
 void	put_pxl_to_img(t_fractol *data, int x, int y, int color);
-void	put_text(t_fractol *data);
-void	julia_init(t_fractol *data);
-void	julia_pthread(t_fractol *data);
 void	burningship_init(t_fractol *data);
-void	burningship_pthread(t_fractol *data);
 void	fract_calc(t_fractol *data);
 int		fract_init(char **argv, t_fractol *env);
 int		key_hook(int keycode, t_fractol *data);

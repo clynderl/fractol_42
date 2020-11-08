@@ -6,47 +6,46 @@
 /*   By: clynderl <clynderl@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 07:55:02 by clynderl          #+#    #+#             */
-/*   Updated: 2020/11/05 13:20:01 by clynderl         ###   ########.fr       */
+/*   Updated: 2020/11/08 10:02:26 by clynderl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+#include "keys_mac.h"
 
 int		key_hook2(int keycode, t_fractol *env)
 {
-	if (keycode == 19)
+	if (keycode == KEY_2)
 		env->color = 2050;
-	else if (keycode == 20)
+	else if (keycode == KEY_3)
 		env->color = 265;
-	else if (keycode == 35)
+	else if (keycode == KEY_P)
 		env->julia_mouse = !env->julia_mouse;
-	else if (keycode == 34)
-		env->show_text = !env->show_text;
 	return (0);
 }
 
 int		key_hook(int keycode, t_fractol *env)
 {
-	if (keycode == 53)
+	if (keycode == KEY_ESCAPE)
 		exit(1);
-	else if (keycode == 69)
+	else if (keycode == KEY_PAD_ADD)
 		env->it_max += 50;
-	else if (keycode == 78)
+	else if (keycode == KEY_PAD_SUB)
 		env->it_max -= 50;
-	else if (keycode == 123)
+	else if (keycode == KEY_LEFT)
 		env->x1 -= 30 / env->zoom;
-	else if (keycode == 124)
+	else if (keycode == KEY_RIGHT)
 		env->x1 += 30 / env->zoom;
-	else if (keycode == 125)
+	else if (keycode == KEY_DOWN)
 		env->y1 += 30 / env->zoom;
-	else if (keycode == 126)
+	else if (keycode == KEY_UP)
 		env->y1 -= 30 / env->zoom;
 	// else if (keycode == 49)
 	// 	fract_init(env);
-	else if (keycode == 18)
+	else if (keycode == KEY_1)
 		env->color = 1677216;
 	key_hook2(keycode, env);
-	fract_calc(env);
+	fract_pthread(env);
 	return (0);
 }
 
@@ -72,6 +71,6 @@ int		mouse_hook(int mousecode, int x, int y, t_fractol *env)
 		ft_zoom(x, y, env);
 	else if (mousecode == 5 || mousecode == 2)
 		ft_dezoom(x, y, env);
-	fract_calc(env);
+	fract_pthread(env);
 	return (0);
 }
